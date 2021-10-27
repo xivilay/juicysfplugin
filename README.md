@@ -1,3 +1,8 @@
+# Current fork changes:
+- Left only CMake build for cross-platform compatibility (Windows is supported for now)
+- Updated JUCE
+- Changed build instructions section
+
 ![image](https://user-images.githubusercontent.com/6141784/60401921-32af9e00-9b80-11e9-8e3a-6c5717f868d6.png)
 
 Latest stable release:
@@ -121,40 +126,19 @@ Or any output device that you can hear audio through.
 
 <img width="502" alt="image" src="https://user-images.githubusercontent.com/6141784/62873427-4cafd500-bd17-11e9-80af-03fbf9742802.png">
 
-# Building from source (macOS)
+# Building from source (CMake)
+## Windows
 
-Install XCode and XCode command line tools. Accept terms.
+CMake, Visual Studio with C++ should be installed.
 
-Install [JUCE](https://shop.juce.com/get-juce) 5.3 in `/Applications`.  
-We expect to find JUCE headers in `/Applications/JUCE/modules`.
+Run `git submodule update --init --recursive` to checkout JUCE sources. 
 
-(Optional) To target VST3, install Steinberg [VST3 Audio Plug-Ins SDK](https://www.steinberg.net/en/company/developers.html).  
-We expect to find a folder `~/SDKs/VST_SDK/VST3_SDK`.
+Run build script from `scripts\win\`.
 
-(Optional) Install IntelliJ AppCode if you prefer it to XCode.
+DLLs from `bin` dir should be placed along with compiled binary (or in system folders)
 
-Open `juicysfplugin/Builds/MacOSX/juicysfplugin.xcodeproj` in XCode (or IntelliJ AppCode).
+For `asio` or `vst2` support sdk headers should be placed to `sdk` dir. Read Steinberg license carefully before doing it.
 
-Build & run the "juicysfplugin - Standalone Plugin" target.
-
-All the libs we link against are project-local (see `juicysfplugin/Builds/MacOSX/lib_relinked`).  
-I have used `install_name_tool` to give these libs relative install names. This ensures that any product you build will be portable.
-
-See my [blog post](https://birchlabs.co.uk/blog/alex/juicysfplugin/synth/cpp/2019/01/05/a-soundfont-vst-for-macos.html) for a deeper explanation as to how juicysfplugin is linked for portable distribution on macOS.
-
-## Testing VST/AU plugins inside an audio plugin host
-
-You'll notice that the schemes for [VST, VST3, AU, AUv3] targets are configured such that "Run" launches the executable `AudioPluginHost.app`. This lets you run the audio plugin as though it were hosted inside a DAW.
-
-I recommend building (e.g. with XCode) the simple Audio Plugin Host that comes with JUCE Framework:
-
-`/Applications/JUCE/extras/AudioPluginHost/Builds/MacOSX/AudioPluginHost.xcodeproj`
-
-Then symlink `/Applications/JUCE/AudioPluginHost.app` to the built `AudioPluginHost.app` (because that's where I told the Run configuration to look for AudioPluginHost.app):
-
-```bash
-ln -sf /Applications/JUCE/extras/AudioPluginHost/Builds/MacOSX/build/Debug/AudioPluginHost.app /Applications/JUCE/AudioPluginHost.app
-```
 
 ## Visual Studio Code settings
 
