@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.15)
 set(PROJECT_NAME "juicysfplugin")
 set(VERSION "2.3.3")
 set(JUCE_DIR "./external/JUCE")
+set(FLUIDSYNTH_DIR "./external/fluidsynth")
+set(FLUIDSYNTH_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/fluidsynth")
 set(SRC_DIR "./src")
 set(FORMATS "Standalone" "VST3")
 
@@ -46,7 +48,15 @@ juce_add_plugin(${PROJECT_NAME}
 
 juce_generate_juce_header(${PROJECT_NAME})
 
-target_include_directories(${PROJECT_NAME} PRIVATE "include")
+target_include_directories(${PROJECT_NAME} PRIVATE 
+    "${FLUIDSYNTH_BUILD_DIR}/include"
+    "${FLUIDSYNTH_DIR}/include"
+)
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+    JUCE_USE_CURL=0
+    JUCE_WEB_BROWSER=0
+)
 
 if(BUILD_ASIO)
     message(STATUS "Adding ASIO...")
@@ -60,11 +70,6 @@ if(BUILD_VST2)
 else()
     target_compile_definitions(${PROJECT_NAME} PUBLIC JUCE_VST3_CAN_REPLACE_VST2=0)
 endif(BUILD_VST2)
-
-target_compile_definitions(${PROJECT_NAME} PUBLIC
-    JUCE_USE_CURL=0
-    JUCE_WEB_BROWSER=0
-)
 
 target_sources(${PROJECT_NAME}
   PRIVATE
@@ -81,11 +86,7 @@ target_sources(${PROJECT_NAME}
 )
 
 if(WIN32)
-    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-        find_library (FLUIDSYNTH libfluidsynth.lib PATHS lib/win/x64 REQUIRED)
-    else()
-        find_library (FLUIDSYNTH libfluidsynth.lib PATHS lib/win/x86 REQUIRED)
-    endif()
+    find_library (FLUIDSYNTH fluidsynth.lib PATHS "${FLUIDSYNTH_BUILD_DIR}/src/${CMAKE_BUILD_TYPE}" REQUIRED)
 endif(WIN32)
 
 target_link_libraries(${PROJECT_NAME}
