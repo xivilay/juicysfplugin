@@ -133,9 +133,15 @@ CMake, Visual Studio with C++ should be installed.
 
 Run `git submodule update --init --recursive` to checkout JUCE sources. 
 
-Run build script from `scripts\win\`.
+Install `vcpkg` and `pkg-config` to be able to compile fluidsynth. 
 
-DLLs from `bin` dir should be placed along with compiled binary (or in system folders)
+Add `glib` and `libsndfile` libraries via `vcpkg`.
+
+Example: `vcpkg install glib:x64-windows libsndfile:x64-windows`.
+
+Define `PKG_CONFIG_EXECUTABLE` and `CMAKE_TOOLCHAIN_FILE` env variables to let cmake find fluidsynth dependencies. 
+
+Run build scripts from `scripts\win\`. First `build-fluidsynth`, then `build`. Optionally `post_build` to copy binaries to `dist` fir.
 
 For `asio` or `vst2` support sdk headers should be placed to `sdk` dir. Read Steinberg license carefully before doing it.
 
