@@ -89,6 +89,11 @@ if(WIN32)
     find_library (FLUIDSYNTH fluidsynth.lib PATHS "${FLUIDSYNTH_BUILD_DIR}/src/${CMAKE_BUILD_TYPE}" REQUIRED)
 endif(WIN32)
 
+if(CMAKE_SYSTEM MATCHES "Linux")
+    message(STATUS "Building for Linux...")
+    find_library (FLUIDSYNTH fluidsynth PATHS "${FLUIDSYNTH_BUILD_DIR}/src" REQUIRED)
+endif()
+
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
     juce::juce_audio_basics
