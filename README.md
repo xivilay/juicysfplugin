@@ -1,6 +1,7 @@
 # Current fork changes:
-- Left only CMake build for cross-platform compatibility (Windows is supported for now)
-- Updated JUCE
+- Left only CMake build for cross-platform compatibility (Windows/Linux are supported for now)
+- Removed binaries from repo, added submodules instead
+- Updated JUCE and fluidsynth to latest
 - Changed build instructions section
 
 ![image](https://user-images.githubusercontent.com/6141784/60401921-32af9e00-9b80-11e9-8e3a-6c5717f868d6.png)
@@ -127,11 +128,11 @@ Or any output device that you can hear audio through.
 <img width="502" alt="image" src="https://user-images.githubusercontent.com/6141784/62873427-4cafd500-bd17-11e9-80af-03fbf9742802.png">
 
 # Building from source (CMake)
+
+Before build run `git submodule update --init --recursive` to checkout JUCE and fluidsynth sources. 
 ## Windows
 
 CMake, Visual Studio with C++ should be installed.
-
-Run `git submodule update --init --recursive` to checkout JUCE sources. 
 
 Install `vcpkg` and `pkg-config` to be able to compile fluidsynth. 
 
@@ -145,6 +146,13 @@ Run build scripts from `scripts\win\`. First `build-fluidsynth`, then `build`. O
 
 For `asio` or `vst2` support sdk headers should be placed to `sdk` dir. Read Steinberg license carefully before doing it.
 
+## Linux
+
+Install the following packages if they are not installed:
+
+`sudo apt install clang cmake doxygen g++ gcc libomp-dev libsndfile1-dev libsystemd-dev libxslt1-dev make pkgconfig`
+
+Run build scripts from `scripts\linux\`. First `build-fluidsynth`, then `build`.
 
 ## Visual Studio Code settings
 
