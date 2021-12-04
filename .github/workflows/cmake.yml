@@ -78,7 +78,7 @@ jobs:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
           vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
           runVcpkgInstall: true
-          runVcpkgFormatString: "[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `${{github.workspace}}/vcpkg_installed`, `--triplet`, `$[env.VCPKG_DEFAULT_TRIPLET]`]"
+          runVcpkgFormatString: "[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `./vcpkg_installed`, `--triplet`, `$[env.VCPKG_DEFAULT_TRIPLET]`]"
 
       - name: Configure CMake (FluidSynth)
         run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}}
