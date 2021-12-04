@@ -33,6 +33,18 @@ env:
                           -Denable-wasapi=0 \
                           -Denable-waveout=0 \
                           -Denable-winmidi=0"
+  LINUX_DEPS: "libasound2-dev \
+               libcurl4-openssl-dev \
+               libfreetype6-dev \
+               libglu1-mesa-dev \
+               libomp-dev \
+               libsndfile1-dev \
+               libsystemd-dev \
+               libxslt1-dev \
+               libwebkit2gtk-4.0-dev \
+               libx11-dev \
+               libxext-dev \
+               libxinerama-dev"
 
 jobs:
   build:
@@ -50,7 +62,7 @@ jobs:
       - name: Install Linux Deps
         if: runner.os == 'Linux'
         run: |
-            sudo apt-get update && sudo apt install libasound2-dev libcurl4-openssl-dev libfreetype6-dev libglu1-mesa-dev libomp-dev libsndfile1-dev libsystemd-dev libxslt1-dev libwebkit2gtk-4.0-dev libx11-dev libxext-dev libxinerama-dev
+            sudo apt-get update && sudo apt install ${{env.LINUX_DEPS}}
 
       - name: Configure CMake (FluidSynth)
         run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}}
@@ -67,7 +79,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.runner }}
+          name: ${{env.PROJECT_NAME}}_${{ matrix.runner }}
           path: ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_artefacts/${{env.BUILD_TYPE}}/**/*.vst3
           if-no-files-found: error
           retention-days: 1
