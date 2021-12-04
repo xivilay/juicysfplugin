@@ -4,17 +4,6 @@
 - Updated JUCE and fluidsynth to latest
 - Changed build instructions section
 
-![image](https://user-images.githubusercontent.com/6141784/60401921-32af9e00-9b80-11e9-8e3a-6c5717f868d6.png)
-
-Latest stable release:
-
-- macOS [2.3.3](https://github.com/Birch-san/juicysfplugin/releases/tag/2.3.3.macOS)
-- Windows x64 [2.3.3](https://github.com/Birch-san/juicysfplugin/releases/tag/2.3.3)
-- Windows x86 [2.3.3](https://github.com/Birch-san/juicysfplugin/releases/tag/2.3.3)
-- Linux was [supported as of 1.0.8](https://github.com/Birch-san/juicysfplugin/pull/3). It has regressed since, but shouldn't be super-hard to get working again. No binary was ever distributed; It has only ever been build-from-source.
-
-Demo track: [mp3](https://github.com/Birch-san/juicysfplugin/releases/download/1.0.5/Demo_track.mp3), [FLAC](https://github.com/Birch-san/juicysfplugin/releases/download/1.0.5/Demo_track.flac), [FLAC +Soundgoodizer](https://github.com/Birch-san/juicysfplugin/releases/download/1.0.5/Demo_track_soundgoodizer.flac)
-
 # What
 
 juicysfplugin is a cross-platform audio plugin for playing MIDI music through a soundfont synthesizer.
@@ -59,8 +48,6 @@ This means you can host it inside your DAW (e.g. GarageBand, FL Studio Mac, Sibe
 I couldn't find a _free_, _easy-to-use_ macOS audio plugin for making music with soundfonts.
 
 # Install (macOS)
-
-Latest release: https://github.com/Birch-san/juicysfplugin/releases
 
 **Download Release.tar.xz, open it to unzip.**
 
@@ -153,101 +140,6 @@ Install the following packages if they are not installed:
 `sudo apt install clang cmake doxygen g++ gcc libomp-dev libsndfile1-dev libsystemd-dev libxslt1-dev make pkgconfig`
 
 Run build scripts from `scripts\linux\`. First `build-fluidsynth`, then `build`.
-
-## Visual Studio Code settings
-
-Concerning the use of Visual Studio Code extension, [C/C++ for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools), as an IDE (i.e. instead of XCode)…
-
-Following advice is for macOS, using brew-installed LLVM 8 Clang.
-
-All includePath entries are shallow (no recursive globbing) for now, since I don't have any deeply-nested headers.  
-We don't need to dip into /usr/local, since all library/framework headers are already in this repository.
-
-Ensure that there exists at the root of the repository, a folder named `.vscode`.
-
-`.vscode/c_cpp_properties.json`
-
-```json
-{
-    "configurations": [
-        {
-            "name": "Mac",
-            "includePath": [
-                "${workspaceFolder}/include",
-                "${workspaceFolder}/Source",
-                "${workspaceFolder}/JuceLibraryCode",
-                "${workspaceFolder}/modules"
-            ],
-            "defines": [],
-            "cStandard": "c11",
-            "cppStandard": "c++14",
-            "intelliSenseMode": "clang-x64",
-            "compilerPath": "/usr/local/Cellar/llvm/8.0.0_1/bin/clang++"
-        }
-    ],
-    "version": 4
-}
-```
-
-I've kept this minimal, but documented some other include paths worthy of consideration (e.g. if more parts of the toolchain were to be used, brew were to be used, or the standard XCode clang were to be used).
-
-`~/Library/Application Support/Code/User/settings.json`
-
-```json
-{
-    "C_Cpp.updateChannel": "Insiders",
-    "C_Cpp.default.intelliSenseMode": "clang-x64",
-    "C_Cpp.default.macFrameworkPath": [
-        // "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks",
-        "/System/Library/Frameworks",
-        // "/Library/Frameworks"
-    ],
-    "C_Cpp.default.includePath": [
-        // "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1",
-        // "/usr/local/include",
-        // "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/10.0.1/include",
-        // "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
-        // "${workspaceFolder}/include"
-        // "/usr/include",
-        "/usr/local/Cellar/llvm/8.0.0_1/Toolchains/LLVM8.0.0.xctoolchain/usr/include/c++/v1",
-        // "/usr/local/Cellar/llvm/8.0.0_1/Toolchains/LLVM8.0.0.xctoolchain/usr/lib/clang/8.0.0/include",
-        // "/usr/local/Cellar/llvm/8.0.0_1/Toolchains/LLVM8.0.0.xctoolchain/usr/include",
-    ],
-    "C_Cpp.default.cStandard": "c11",
-    "C_Cpp.default.cppStandard": "c++14",
-    "C_Cpp.default.compilerPath": "/usr/local/Cellar/llvm/8.0.0_1/bin/clang++",
-    "C_Cpp.clang_format_fallbackStyle": "LLVM",
-    "C_Cpp.clang_format_style": "LLVM",
-    "C_Cpp.default.browse.limitSymbolsToIncludedHeaders": true,
-    "C_Cpp.default.enableConfigurationSquiggles": true,
-    "C_Cpp.errorSquiggles": "Enabled",
-    "C_Cpp.enhancedColorization": "Enabled"
-}
-```
-
-# Test matrix
-
-Known working with:
-
-- macOS Mojave 10.14.5
-- Windows 10 x64 1903
-
-# Making releases
-
-Follow the steps in [Building from source](#building-from-source) to output a product to the build folder.
-
-Builds are automatically portable.
-
-```bash
-cd juicysfplugin/Builds/MacOSX
-# first check that you have a Release or Debug product in the `build` directory
-
-# follows symlinks, archives Release and Debug folders as tar.xz
-./archive-for-distribution.sh
-```
-
-Note: Release **and** Debug flavors _both_ output targets [VST, VST3, AU] to the same location:  `~/Library/Audio/Plug-Ins/$TARGET/juicysfplugin.$EXT`.  
-Whichever flavor you built _most recently_, wins.
 
 # Licenses
 
