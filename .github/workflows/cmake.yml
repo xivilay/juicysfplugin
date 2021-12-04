@@ -10,7 +10,7 @@ env:
   PROJECT_NAME: juicysfplugin
   BUILD_TYPE: Release
   BUILD_DIR: ${{github.workspace}}/build
-  PKG_CONFIG_PATH: ${{github.workspace}}/../b/vcpkg_installed
+  PKG_CONFIG_PATH: ${{github.workspace}}/../b/vcpkg_installed/${{env.VCPKG_DEFAULT_TRIPLET}}/lib/pkgconfig
   VCPKG_TOOLCHAIN: ${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake
   FLUIDSYNTH_DIR: external/fluidsynth
   FLUIDSYNTH_BUILD_DIR: ${{github.workspace}}/build/fluidsynth
