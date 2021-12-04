@@ -50,7 +50,7 @@ jobs:
   build:
     strategy:
       matrix:
-        runner: ['ubuntu']
+        runner: ['windows']
     runs-on: ${{ matrix.runner }}-latest
     name: ${{ matrix.runner }}
     steps:
