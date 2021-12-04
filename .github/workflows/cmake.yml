@@ -10,6 +10,7 @@ env:
   PROJECT_NAME: juicysfplugin
   BUILD_TYPE: Release
   BUILD_DIR: ${{github.workspace}}/build
+  PKG_CONFIG_PATH: ${{github.workspace}}/vcpkg_installed/x64-windows/lib/pkgconfig
   VCPKG_TOOLCHAIN: ${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake
   FLUIDSYNTH_DIR: external/fluidsynth
   FLUIDSYNTH_BUILD_DIR: ${{github.workspace}}/build/fluidsynth
@@ -77,11 +78,7 @@ jobs:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
           vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
           runVcpkgInstall: true
-
-      - name: Windows - Set Env Var
-        if: runner.os == 'Windows'
-        run: |
-          echo "PKG_CONFIG_PATH=${{github.workspace}}/../b/vcpkg_installed/x64-windows/lib/pkgconfig" >> $GITHUB_ENV
+          runVcpkgFormatString: [`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `${{github.workspace}}/vcpkg_installed`, `--triplet`, `$[env.VCPKG_DEFAULT_TRIPLET]`]
 
       - name: Configure CMake (FluidSynth)
         run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}}
