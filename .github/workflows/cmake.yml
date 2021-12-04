@@ -2,14 +2,16 @@ name: CMake
 
 on:
   push:
-    branches: [ github ]
+    branches: [ cmake ]
   pull_request:
-    branches: [ github ]
+    branches: [ cmake ]
 
 env:
   PROJECT_NAME: juicysfplugin
   BUILD_TYPE: Release
   BUILD_DIR: ${{github.workspace}}/build
+  VCPKG_TRIPLET: x64-windows
+  VCPKG_INSTALL_DIR: ${{github.workspace}}/vcpkg_installed/x64-windows
   PKG_CONFIG_PATH: ${{github.workspace}}/vcpkg_installed/x64-windows/lib/pkgconfig
   FLUIDSYNTH_DIR: ${{github.workspace}}/external/fluidsynth
   FLUIDSYNTH_BUILD_DIR: ${{github.workspace}}/build/fluidsynth
@@ -51,7 +53,7 @@ jobs:
   build:
     strategy:
       matrix:
-        runner: ['windows']
+        runner: ['windows', 'ubuntu', 'macos']
     runs-on: ${{ matrix.runner }}-latest
     name: ${{ matrix.runner }}
     steps:
@@ -77,11 +79,7 @@ jobs:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
           vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
           runVcpkgInstall: true
-          runVcpkgFormatString: "[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `./vcpkg_installed`, `--triplet`, `$[env.VCPKG_DEFAULT_TRIPLET]`]"
-
-      - name: List Output
-        working-directory: ./vcpkg_installed/x64-windows
-        run: ls -R
+          runVcpkgFormatString: "[`install`, `--recurse`, `--clean-after-build`, `--x-install-root`, `./vcpkg_installed`, `--triplet`, `${{env.VCPKG_TRIPLET}}`]"
 
       - name: Configure CMake (FluidSynth)
         run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}}
@@ -96,6 +94,7 @@ jobs:
         run: cmake --build ${{env.BUILD_DIR}} --config ${{env.BUILD_TYPE}}
 
       - name: Upload artifacts (Unix)
+        if: runner.os != 'Windows'
         uses: actions/upload-artifact@v2
         with:
           name: ${{env.PROJECT_NAME}}_${{ matrix.runner }}
@@ -115,17 +114,17 @@ jobs:
             ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_artefacts/${{env.BUILD_TYPE}}/VST3/*.vst3
             ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_artefacts/${{env.BUILD_TYPE}}/Standalone/*
             ${{env.FLUIDSYNTH_BUILD_DIR}}/src/${{env.BUILD_TYPE}}/libfluidsynth-3.dll
-            vcpkg_installed/x64-windows/bin/FLAC.dll
-            vcpkg_installed/x64-windows/bin/glib-2.0-0.dll
-            vcpkg_installed/x64-windows/bin/iconv-2.dll
-            vcpkg_installed/x64-windows/bin/intl-8.dll
-            vcpkg_installed/x64-windows/bin/libfluidsynth-3.dll
-            vcpkg_installed/x64-windows/bin/ogg.dll
-            vcpkg_installed/x64-windows/bin/opus.dll
-            vcpkg_installed/x64-windows/bin/pcre.dll
-            vcpkg_installed/x64-windows/bin/sndfile.dll
-            vcpkg_installed/x64-windows/bin/vorbis.dll
-            vcpkg_installed/x64-windows/bin/vorbisenc.dll
+            ${{VCPKG_INSTALL_DIR}}/bin/FLAC.dll
+            ${{VCPKG_INSTALL_DIR}}/bin/glib-2.0-0.dll
+            ${{VCPKG_INSTALL_DIR}}/bin/iconv-2.dll
+            ${{VCPKG_INSTALL_DIR}}/bin/intl-8.dll
+            ${{VCPKG_INSTALL_DIR}}/bin/libfluidsynth-3.dll
+            ${{VCPKG_INSTALL_DIR}}/bin/ogg.dll
+            ${{VCPKG_INSTALL_DIR}}/bin/opus.dll
+            ${{VCPKG_INSTALL_DIR}}/bin/pcre.dll
+            ${{VCPKG_INSTALL_DIR}}/bin/sndfile.dll
+            ${{VCPKG_INSTALL_DIR}}/bin/vorbis.dll
+            ${{VCPKG_INSTALL_DIR}}/bin/vorbisenc.dll
 
           if-no-files-found: error
           retention-days: 1
