@@ -94,6 +94,11 @@ if(CMAKE_SYSTEM MATCHES "Linux")
     find_library (FLUIDSYNTH fluidsynth PATHS "${FLUIDSYNTH_BUILD_DIR}/src" REQUIRED)
 endif()
 
+if(CMAKE_SYSTEM MATCHES "Darwin")
+    message(STATUS "Building for MacOS...")
+    find_library (FLUIDSYNTH fluidsynth PATHS "${FLUIDSYNTH_BUILD_DIR}/src" REQUIRED)
+endif()
+
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
     juce::juce_audio_basics
