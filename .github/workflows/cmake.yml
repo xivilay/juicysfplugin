@@ -10,6 +10,7 @@ env:
   PROJECT_NAME: juicysfplugin
   BUILD_TYPE: Release
   BUILD_DIR: ${{github.workspace}}/build
+  VCPKG_TOOLCHAIN: ${{github.workspace}}/vcpkg/scripts/buildsystems/vcpkg.cmake
   FLUIDSYNTH_DIR: external/fluidsynth
   FLUIDSYNTH_BUILD_DIR: ${{github.workspace}}/build/fluidsynth
   FLUIDSYNTH_BUILD_ARGS: "-Denable-floats=1 \
@@ -64,8 +65,15 @@ jobs:
         run: |
             sudo apt-get update && sudo apt install ${{env.LINUX_DEPS}}
 
+      - name: Setup VCPKG
+        if: runner.os == 'Windows'
+        uses: lukka/run-vcpkg@v10
+        with:
+          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+          runVcpkgInstall: true
+
       - name: Configure CMake (FluidSynth)
-        run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}}
+        run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}} -DCMAKE_TOOLCHAIN_FILE=${{env.VCPKG_TOOLCHAIN}}
 
       - name: Build (FluidSynth)
         run: cmake --build ${{env.FLUIDSYNTH_BUILD_DIR}} --config ${{env.BUILD_TYPE}}
