@@ -6,6 +6,8 @@
 
 # What
 
+![image](https://user-images.githubusercontent.com/6141784/60401921-32af9e00-9b80-11e9-8e3a-6c5717f868d6.png)
+
 juicysfplugin is a cross-platform audio plugin for playing MIDI music through a soundfont synthesizer.
 
 It's well-suited for making videogame music. If you have a soundfont of your favourite game, you can write your own melodies with its instruments.
