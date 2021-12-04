@@ -1,0 +1,73 @@
+name: CMake
+
+on:
+  push:
+    branches: [ github ]
+  pull_request:
+    branches: [ github ]
+
+env:
+  PROJECT_NAME: juicysfplugin
+  BUILD_TYPE: Release
+  BUILD_DIR: ${{github.workspace}}/build
+  FLUIDSYNTH_DIR: external/fluidsynth
+  FLUIDSYNTH_BUILD_DIR: ${{github.workspace}}/build/fluidsynth
+  FLUIDSYNTH_BUILD_ARGS: "-Denable-floats=1 \
+                          -Denable-libsndfile=1 \
+                          -Denable-threads=1 \
+                          -Denable-pkgconfig=1 \
+                          -Denable-aufile=0 \
+                          -Denable-dbus=0 \
+                          -Denable-dsound=0 \
+                          -Denable-ipv6=0 \
+                          -Denable-jack=0 \
+                          -Denable-ladspa=0 \
+                          -Denable-libinstpatch=0 \
+                          -Denable-midishare=0 \
+                          -Denable-network=0 \
+                          -Denable-openmp=0 \
+                          -Denable-oss=0 \
+                          -Denable-pulseaudio=0 \
+                          -Denable-readline=0 \
+                          -Denable-sdl2=0 \
+                          -Denable-wasapi=0 \
+                          -Denable-waveout=0 \
+                          -Denable-winmidi=0"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        runner: ['ubuntu']
+    runs-on: ${{ matrix.runner }}-latest
+    name: ${{ matrix.runner }}
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Install Linux Deps
+        if: runner.os == 'Linux'
+        run: |
+            sudo apt-get update && sudo apt install libasound2-dev libcurl4-openssl-dev libfreetype6-dev libglu1-mesa-dev libomp-dev libsndfile1-dev libsystemd-dev libxslt1-dev libwebkit2gtk-4.0-dev libx11-dev libxext-dev libxinerama-dev
+
+      - name: Configure CMake (FluidSynth)
+        run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}}
+
+      - name: Build (FluidSynth)
+        run: cmake --build ${{env.FLUIDSYNTH_BUILD_DIR}} --config ${{env.BUILD_TYPE}}
+
+      - name: Configure CMake
+        run: cmake -B ${{env.BUILD_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      - name: Build
+        run: cmake --build ${{env.BUILD_DIR}} --config ${{env.BUILD_TYPE}}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.runner }}
+          path: ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_artefacts/${{env.BUILD_TYPE}}/**/*.vst3
+          if-no-files-found: error
+          retention-days: 1
