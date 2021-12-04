@@ -79,6 +79,10 @@ jobs:
           vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
           runVcpkgInstall: true
 
+      - name: List Output
+        working-directory: ${{ github.workspace }}/vcpkg
+        run: ls -R
+
       - name: Configure CMake (FluidSynth)
         run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}} -DCMAKE_TOOLCHAIN_FILE=${{env.VCPKG_TOOLCHAIN}}
 
