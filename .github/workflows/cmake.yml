@@ -51,7 +51,7 @@ jobs:
   build:
     strategy:
       matrix:
-        runner: ['windows']
+        runner: ['macos']
     runs-on: ${{ matrix.runner }}-latest
     name: ${{ matrix.runner }}
     steps:
@@ -65,7 +65,7 @@ jobs:
         run: |
             sudo apt-get update && sudo apt install ${{env.LINUX_DEPS}}
 
-      - name: Setup VCPKG
+      - name: Setup Vcpkg
         if: runner.os == 'Windows'
         uses: lukka/run-vcpkg@v10
         with:
@@ -74,7 +74,7 @@ jobs:
           runVcpkgInstall: true
 
       - name: Configure CMake (FluidSynth)
-        run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}} -DCMAKE_TOOLCHAIN_FILE=${{env.VCPKG_TOOLCHAIN}}
+        run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}}
 
       - name: Build (FluidSynth)
         run: cmake --build ${{env.FLUIDSYNTH_BUILD_DIR}} --config ${{env.BUILD_TYPE}}
