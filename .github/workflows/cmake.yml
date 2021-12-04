@@ -51,7 +51,7 @@ jobs:
   build:
     strategy:
       matrix:
-        runner: ['ubuntu']
+        runner: ['windows']
     runs-on: ${{ matrix.runner }}-latest
     name: ${{ matrix.runner }}
     steps:
@@ -79,7 +79,7 @@ jobs:
           runVcpkgInstall: true
 
       - name: Configure CMake (FluidSynth)
-        run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}}
+        run: cmake -B ${{env.FLUIDSYNTH_BUILD_DIR}} -S ${{env.FLUIDSYNTH_DIR}} -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ${{env.FLUIDSYNTH_BUILD_ARGS}} -DCMAKE_TOOLCHAIN_FILE=${{env.VCPKG_TOOLCHAIN}} -DPKG_CONFIG_PATH=${{github.workspace}}/vcpkg/installed/x64-windows/lib/pkgconfig
 
       - name: Build (FluidSynth)
         run: cmake --build ${{env.FLUIDSYNTH_BUILD_DIR}} --config ${{env.BUILD_TYPE}}
