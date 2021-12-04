@@ -91,6 +91,7 @@ jobs:
         run: cmake --build ${{env.BUILD_DIR}} --config ${{env.BUILD_TYPE}}
 
       - name: List Output
+        working-directory: ${{env.BUILD_DIR}}
         run: ls -R
 
       - name: Upload artifacts
