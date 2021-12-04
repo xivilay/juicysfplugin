@@ -135,6 +135,11 @@ Run build scripts from `scripts\win\`. First `build-fluidsynth`, then `build`. O
 
 For `asio` or `vst2` support sdk headers should be placed to `sdk` dir. Read Steinberg license carefully before doing it.
 
+Example:
+
+![image](https://user-images.githubusercontent.com/20886280/144709125-aa4fb520-c350-43b3-9f6e-f5846c1de6f5.png)
+
+
 ## Linux
 
 Install the following packages if they are not installed:
