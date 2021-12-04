@@ -90,10 +90,16 @@ jobs:
       - name: Build
         run: cmake --build ${{env.BUILD_DIR}} --config ${{env.BUILD_TYPE}}
 
+      - name: List Output
+        run: ls -R
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: ${{env.PROJECT_NAME}}_${{ matrix.runner }}
-          path: ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_artefacts/${{env.BUILD_TYPE}}/**/*.vst3
+          path: |
+            ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_artefacts/${{env.BUILD_TYPE}}/VST3/*.vst3
+            ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_artefacts/${{env.BUILD_TYPE}}/Standalone/*
+            ${{env.FLUIDSYNTH_BUILD_DIR}}/src/
           if-no-files-found: error
           retention-days: 1
