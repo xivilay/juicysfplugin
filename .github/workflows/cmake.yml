@@ -80,7 +80,7 @@ jobs:
           runVcpkgInstall: true
 
       - name: List Output
-        working-directory: ${{ github.workspace }}/b/vcpkg_installed
+        working-directory: ${{ env.VCPKG_INSTALLED_DIR }}
         run: ls -R
 
       - name: Configure CMake (FluidSynth)
