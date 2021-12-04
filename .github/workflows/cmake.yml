@@ -60,12 +60,17 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Install Linux Deps
+      - name: Linux - Install Deps
         if: runner.os == 'Linux'
         run: |
             sudo apt-get update && sudo apt install ${{env.LINUX_DEPS}}
 
-      - name: Setup Vcpkg
+      - name: MacOs - Install Deps
+        if: runner.os == 'macOS'
+        run: |
+            brew install glib libomp libsndfile
+
+      - name: Windows - Install Deps (Vcpkg)
         if: runner.os == 'Windows'
         uses: lukka/run-vcpkg@v10
         with:
