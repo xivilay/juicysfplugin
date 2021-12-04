@@ -13,7 +13,8 @@ env:
   PKG_CONFIG_PATH: ${{github.workspace}}/vcpkg_installed/x64-windows/lib/pkgconfig
   FLUIDSYNTH_DIR: ${{github.workspace}}/external/fluidsynth
   FLUIDSYNTH_BUILD_DIR: ${{github.workspace}}/build/fluidsynth
-  FLUIDSYNTH_BUILD_ARGS: "-Denable-floats=1 \
+  FLUIDSYNTH_BUILD_ARGS: "-DBUILD_SHARED_LIBS=0 \
+                          -Denable-floats=1 \
                           -Denable-libsndfile=1 \
                           -Denable-threads=1 \
                           -Denable-pkgconfig=1 \
@@ -95,7 +96,7 @@ jobs:
       - name: Build
         run: cmake --build ${{env.BUILD_DIR}} --config ${{env.BUILD_TYPE}}
 
-      - name: Upload artifacts
+      - name: Upload artifacts (Unix)
         uses: actions/upload-artifact@v2
         with:
           name: ${{env.PROJECT_NAME}}_${{ matrix.runner }}
@@ -105,3 +106,28 @@ jobs:
             ${{env.FLUIDSYNTH_BUILD_DIR}}/src/
           if-no-files-found: error
           retention-days: 1
+
+      - name: Upload artifacts (Win)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{env.PROJECT_NAME}}_${{ matrix.runner }}
+          path: |
+            ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_artefacts/${{env.BUILD_TYPE}}/VST3/*.vst3
+            ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_artefacts/${{env.BUILD_TYPE}}/Standalone/*
+            ${{env.FLUIDSYNTH_BUILD_DIR}}/src/${{env.BUILD_TYPE}}/libfluidsynth-3.dll
+            vcpkg_installed/x64-windows/bin/FLAC.dll
+            vcpkg_installed/x64-windows/bin/glib-2.0-0.dll
+            vcpkg_installed/x64-windows/bin/iconv-2.dll
+            vcpkg_installed/x64-windows/bin/intl-8.dll
+            vcpkg_installed/x64-windows/bin/libfluidsynth-3.dll
+            vcpkg_installed/x64-windows/bin/ogg.dll
+            vcpkg_installed/x64-windows/bin/opus.dll
+            vcpkg_installed/x64-windows/bin/pcre.dll
+            vcpkg_installed/x64-windows/bin/sndfile.dll
+            vcpkg_installed/x64-windows/bin/vorbis.dll
+            vcpkg_installed/x64-windows/bin/vorbisenc.dll
+
+          if-no-files-found: error
+          retention-days: 1
+
