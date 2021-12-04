@@ -114,17 +114,17 @@ jobs:
             ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_artefacts/${{env.BUILD_TYPE}}/VST3/*.vst3
             ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_artefacts/${{env.BUILD_TYPE}}/Standalone/*
             ${{env.FLUIDSYNTH_BUILD_DIR}}/src/${{env.BUILD_TYPE}}/libfluidsynth-3.dll
-            ${{VCPKG_INSTALL_DIR}}/bin/FLAC.dll
-            ${{VCPKG_INSTALL_DIR}}/bin/glib-2.0-0.dll
-            ${{VCPKG_INSTALL_DIR}}/bin/iconv-2.dll
-            ${{VCPKG_INSTALL_DIR}}/bin/intl-8.dll
-            ${{VCPKG_INSTALL_DIR}}/bin/libfluidsynth-3.dll
-            ${{VCPKG_INSTALL_DIR}}/bin/ogg.dll
-            ${{VCPKG_INSTALL_DIR}}/bin/opus.dll
-            ${{VCPKG_INSTALL_DIR}}/bin/pcre.dll
-            ${{VCPKG_INSTALL_DIR}}/bin/sndfile.dll
-            ${{VCPKG_INSTALL_DIR}}/bin/vorbis.dll
-            ${{VCPKG_INSTALL_DIR}}/bin/vorbisenc.dll
+            ${{env.VCPKG_INSTALL_DIR}}/bin/FLAC.dll
+            ${{env.VCPKG_INSTALL_DIR}}/bin/glib-2.0-0.dll
+            ${{env.VCPKG_INSTALL_DIR}}/bin/iconv-2.dll
+            ${{env.VCPKG_INSTALL_DIR}}/bin/intl-8.dll
+            ${{env.VCPKG_INSTALL_DIR}}/bin/libfluidsynth-3.dll
+            ${{env.VCPKG_INSTALL_DIR}}/bin/ogg.dll
+            ${{env.VCPKG_INSTALL_DIR}}/bin/opus.dll
+            ${{env.VCPKG_INSTALL_DIR}}/bin/pcre.dll
+            ${{env.VCPKG_INSTALL_DIR}}/bin/sndfile.dll
+            ${{env.VCPKG_INSTALL_DIR}}/bin/vorbis.dll
+            ${{env.VCPKG_INSTALL_DIR}}/bin/vorbisenc.dll
 
           if-no-files-found: error
           retention-days: 1
