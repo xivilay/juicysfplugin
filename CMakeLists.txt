@@ -86,7 +86,7 @@ target_sources(${PROJECT_NAME}
 )
 
 if(WIN32)
-    find_library (FLUIDSYNTH libfluidsynth.lib PATHS "${FLUIDSYNTH_BUILD_DIR}/src/${CMAKE_BUILD_TYPE}" REQUIRED)
+    find_library (FLUIDSYNTH fluidsynth.lib PATHS "${FLUIDSYNTH_BUILD_DIR}/src/${CMAKE_BUILD_TYPE}" REQUIRED)
 endif(WIN32)
 
 if(CMAKE_SYSTEM MATCHES "Linux")
