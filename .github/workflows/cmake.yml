@@ -70,6 +70,7 @@ jobs:
         uses: lukka/run-vcpkg@v10
         with:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+          vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
           runVcpkgInstall: true
 
       - name: Configure CMake (FluidSynth)
