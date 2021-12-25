@@ -1,5 +1,7 @@
 .vscode
 build
+prebuilt
 dist
 .gradle
 .cxx
+jniLibs

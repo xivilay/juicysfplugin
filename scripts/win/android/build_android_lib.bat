@@ -4,7 +4,7 @@ SET BUILD_PATH=%~dp0\..\..\..\build\
 SET VS_TOOLS_PATH=%ProgramFiles(x86)%\Microsoft Visual Studio\2019\BuildTools\Common7\Tools
 SET NDK_PATH=%LocalAppData%\Android\Sdk\ndk\21.4.7075529
 SET TOOLCHAIN_PATH=%NDK_PATH%\build\cmake\android.toolchain.cmake
-SET ANDROID_API_VERSION=29
+SET ANDROID_API_VERSION=24
 SET ANDROID_ABI=arm64-v8a
 
 cd /d "%VS_TOOLS_PATH%\..\.." & "%VS_TOOLS_PATH%\vsdevcmd.bat" & cd %BUILD_PATH% & ^
