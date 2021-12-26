@@ -211,37 +211,9 @@ if(ANDROID)
 
     message(STATUS "${ANDROID_ABI}")
 
-    add_library(FLAC SHARED IMPORTED)
     add_library(fluidsynth SHARED IMPORTED)
-    add_library(fluidsynth-assetloader SHARED IMPORTED)
-    add_library(gio SHARED IMPORTED)
-    add_library(glib SHARED IMPORTED)
-    add_library(gmodule SHARED IMPORTED)
-    add_library(gobject SHARED IMPORTED)
-    add_library(gthread SHARED IMPORTED)
-    add_library(instpatch SHARED IMPORTED)
-    add_library(ogg SHARED IMPORTED)
-    add_library(opus SHARED IMPORTED)
-    add_library(sndfile SHARED IMPORTED)
-    add_library(vorbis SHARED IMPORTED)
-    add_library(vorbisenc SHARED IMPORTED)
-    add_library(vorbisfile SHARED IMPORTED)
 
-    set_target_properties(FLAC PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libFLAC.so")
     set_target_properties(fluidsynth PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libfluidsynth.so")
-    set_target_properties(fluidsynth-assetloader PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libfluidsynth-assetloader.so")
-    set_target_properties(gio PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libgio-2.0.so")
-    set_target_properties(glib PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libglib-2.0.so")
-    set_target_properties(gmodule PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libgmodule-2.0.so")
-    set_target_properties(gobject PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libgobject-2.0.so")
-    set_target_properties(gthread PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libgthread-2.0.so")
-    set_target_properties(instpatch PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libinstpatch-1.0.so")
-    set_target_properties(ogg PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libogg.so")
-    set_target_properties(opus PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libopus.so")
-    set_target_properties(sndfile PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libsndfile.so")
-    set_target_properties(vorbis PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libvorbis.so")
-    set_target_properties(vorbisenc PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libvorbisenc.so")
-    set_target_properties(vorbisfile PROPERTIES IMPORTED_LOCATION "${PREBUILT_DIR}/libvorbisfile.so")
 
     add_library("juceAndroid" INTERFACE)
 
@@ -254,28 +226,8 @@ if(ANDROID)
         ${OBOE_LIB}
     )
 
-    add_library("fluidsynthDeps" INTERFACE)
-
-    target_link_libraries("fluidsynthDeps" INTERFACE
-        "FLAC"
-        "fluidsynth"
-        "fluidsynth-assetloader"
-        "gio"
-        "glib"
-        "gmodule"
-        "gobject"
-        "gthread"
-        "instpatch"
-        "ogg"
-        "opus"
-        "sndfile"
-        "vorbis"
-        "vorbisenc"
-        "vorbisfile"
-    )
-
     target_link_libraries(${PROJECT_NAME} PRIVATE
         "juceAndroid"
-        "fluidsynthDeps"
+        "fluidsynth"
     )
 endif(ANDROID)
