@@ -2,6 +2,7 @@
 build
 prebuilt
 dist
+.idea
 .gradle
 .cxx
 jniLibs
