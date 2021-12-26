@@ -254,8 +254,9 @@ if(ANDROID)
         ${OBOE_LIB}
     )
 
-    target_link_libraries(${PROJECT_NAME} PRIVATE
-        "juceAndroid"
+    add_library("fluidsynthDeps" INTERFACE)
+
+    target_link_libraries("fluidsynthDeps" INTERFACE
         "FLAC"
         "fluidsynth"
         "fluidsynth-assetloader"
@@ -271,5 +272,10 @@ if(ANDROID)
         "vorbis"
         "vorbisenc"
         "vorbisfile"
+    )
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        "juceAndroid"
+        "fluidsynthDeps"
     )
 endif(ANDROID)
