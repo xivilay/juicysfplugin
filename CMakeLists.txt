@@ -145,7 +145,7 @@ if(ANDROID)
     set(OBOE_LIB "oboe")
     set(CPU_FEATURES_LIB "cpufeatures")
     set(CPU_FEATURES_ENTRY "sources/android/cpufeatures/cpu-features.c")
-    set(FLUIDSYNTH_PREBUILD_DIR "${CMAKE_CURRENT_LIST_DIR}/prebuilt/fluidsynth")
+    set(FLUIDSYNTH_PREBUILD_DIR "${CMAKE_CURRENT_LIST_DIR}/prebuilt")
 
     include_directories(AFTER
         "${JUCE_MODULES_DIR}"
