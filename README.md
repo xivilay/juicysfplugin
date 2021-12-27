@@ -148,6 +148,10 @@ Install the following packages if they are not installed:
 
 Run build scripts from `scripts\linux\`. First `build-fluidsynth`, then `build`.
 
+## MacOS and Android
+
+Build scripts are not included, but you may take a look at github workflows as example.
+
 # Licenses
 
 Overall, juicysfplugin is GPLv3.
