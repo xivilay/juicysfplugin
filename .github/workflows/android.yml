@@ -45,6 +45,9 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+          
+      - name: Linux - Install Deps
+        run: sudo apt-get update && sudo apt install ninja
 
       - name: Grant Exec Permission
         working-directory: ./android
