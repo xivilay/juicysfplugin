@@ -52,7 +52,7 @@ jobs:
 
       - name: Build
         working-directory: ./android
-        run: gradlew build
+        run: ./gradlew build
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
