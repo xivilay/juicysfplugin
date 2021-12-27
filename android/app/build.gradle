@@ -41,7 +41,7 @@ android {
         signingConfig signingConfigs.juceSigning
         externalNativeBuild {
             cmake {
-                arguments "-DANDROID_TOOLCHAIN=clang", "-DANDROID_PLATFORM=android-24"
+                arguments "-DANDROID_TOOLCHAIN=clang", "-DANDROID_PLATFORM=android-24", "-DANDROID_STL=c++_shared", "-DANDROID_CPP_FEATURES=exceptions rtti", "-DANDROID_ARM_MODE=arm", "-DANDROID_ARM_NEON=TRUE"
             }
         }
     }

@@ -159,10 +159,6 @@ if(ANDROID)
     set_source_files_properties("${ANDROID_NDK}/${CPU_FEATURES_ENTRY}" PROPERTIES COMPILE_FLAGS "-Wno-sign-conversion -Wno-gnu-statement-expression")
 
     add_definitions(
-        "-DANDROID_STL=c++_shared"
-        "-DANDROID_CPP_FEATURES=exceptions rtti"
-        "-DANDROID_ARM_MODE=arm"
-        "-DANDROID_ARM_NEON=TRUE"
         "-DJUCER_ANDROIDSTUDIO_7F0E4A25=1"
         "-DJUCE_ANDROID=1"
         "-DJUCE_ANDROID_API_VERSION=24"
