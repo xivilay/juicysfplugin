@@ -70,10 +70,14 @@ jobs:
         working-directory: ./android
         run: ./gradlew build
 
+      - name: Zip
+        working-directory: ${{env.BUILD_DIR}}
+        run: cmake -E tar cv ${{env.PROJECT_NAME}}_android.7z --format=7zip *.apk
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: ${{env.PROJECT_NAME}}_android
-          path: ${{env.BUILD_DIR}}/*.apk
+          path: ${{env.BUILD_DIR}}/${{env.PROJECT_NAME}}_android.7z
           if-no-files-found: error
           retention-days: 1
