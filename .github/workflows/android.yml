@@ -12,6 +12,19 @@ env:
   BUILD_DIR: ${{github.workspace}}/android/app/build/outputs/apk/release/
   PREBUILT_DIR: prebuilt
   FLUIDSYNTH_VERSION: 2.2.4
+  LINUX_DEPS: "libasound2-dev \
+               libcurl4-openssl-dev \
+               libfreetype6-dev \
+               libglu1-mesa-dev \
+               libomp-dev \
+               libsndfile1-dev \
+               libsystemd-dev \
+               libxslt1-dev \
+               libwebkit2gtk-4.0-dev \
+               libx11-dev \
+               libxext-dev \
+               libxinerama-dev \
+               ninja-build"
 
 jobs:
   build:
@@ -47,7 +60,7 @@ jobs:
           distribution: 'adopt'
           
       - name: Linux - Install Deps
-        run: sudo apt-get update && sudo apt install ninja-build
+        run: sudo apt-get update && sudo apt install ${{env.LINUX_DEPS}}
 
       - name: Grant Exec Permission
         working-directory: ./android
