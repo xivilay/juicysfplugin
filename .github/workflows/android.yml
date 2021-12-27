@@ -1,0 +1,57 @@
+name: CMake
+
+on:
+  push:
+    branches: [ cmake ]
+  pull_request:
+    branches: [ cmake ]
+
+env:
+  PROJECT_NAME: juicysfplugin
+  BUILD_TYPE: Release
+  BUILD_DIR: ${{github.workspace}}/android/app/build/outputs/apk/release/
+  PREBUILT_DIR: prebuilt
+  FLUIDSYNTH_VERSION: 2.2.4
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        runner: ['ubuntu']
+    runs-on: ${{ matrix.runner }}-latest
+    name: ${{ matrix.runner }}
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Download Prebuilt Fluidsynth Binaries
+        run: wget https://github.com/FluidSynth/fluidsynth/releases/download/v${{env.FLUIDSYNTH_VERSION}}/fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip
+
+      - name: Unpack Fluidsynth
+        run: |
+            unzip fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip -d ${{env.PREBUILT_DIR}} **/libfluidsynth.so
+            unzip fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip -d ${{env.PREBUILT_DIR}}  include/**/*
+
+      - name: Unpack Fluidsynth Dependencies
+        run: unzip fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip -d android/app/src/main/tmp *.so -x lib/**/libfluidsynth.so
+
+      - name: Move Fluidsynth Dependencies
+        run: mv android/app/src/main/tmp/lib android/app/src/main/jniLibs
+
+      - name: Grant Exec Permission
+        working-directory: ./android
+        run: chmod +x gradlew
+
+      - name: Build
+        working-directory: ./android
+        run: gradlew build
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{env.PROJECT_NAME}}_android
+          path: ${{env.BUILD_DIR}}/*.apk
+          if-no-files-found: error
+          retention-days: 1
