@@ -3,12 +3,6 @@ name: CMake
 on:
   push:
     branches: [ cmake ]
-    paths:
-      - '!.github/workflows/**'
-  pull_request:
-    branches: [ cmake ]
-    paths:
-      - '!.github/workflows/**'
 
 env:
   PROJECT_NAME: juicysfplugin
