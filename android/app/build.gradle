@@ -8,6 +8,7 @@ android {
             version "3.22.1"
         }
     }
+
     signingConfigs {
         juceSigning {
             storeFile     file("${System.properties['user.home']}${File.separator}.android${File.separator}debug.keystore")
@@ -26,17 +27,22 @@ android {
         quiet false
     }
 
+    splits {
+        abi {
+            enable true
+            include "x86", "x86_64", "armeabi-v7a", "arm64-v8a"
+        }
+    }
+
     defaultConfig {
         applicationId "uk.co.birchlabs.JuicySF"
         minSdkVersion    24
         targetSdkVersion 29
+        signingConfig signingConfigs.juceSigning
         externalNativeBuild {
             cmake {
-                arguments "-DANDROID_TOOLCHAIN=clang", "-DANDROID_PLATFORM=android-24", "-DANDROID_STL=c++_shared", "-DANDROID_CPP_FEATURES=exceptions rtti", "-DANDROID_ARM_MODE=arm", "-DANDROID_ARM_NEON=TRUE", "-DCMAKE_CXX_STANDARD=17", "-DCMAKE_CXX_EXTENSIONS=OFF"
+                arguments "-DANDROID_TOOLCHAIN=clang", "-DANDROID_PLATFORM=android-24", "-DANDROID_STL=c++_shared", "-DANDROID_CPP_FEATURES=exceptions rtti", "-DANDROID_ARM_MODE=arm", "-DANDROID_ARM_NEON=TRUE"
             }
-        }
-        ndk {
-            abiFilters "x86" // x86 x86_64 armeabi-v7a arm64-v8a
         }
     }
 
@@ -45,7 +51,6 @@ android {
              initWith debug
              debuggable    true
              jniDebuggable true
-             signingConfig signingConfigs.juceSigning
              externalNativeBuild {
                  cmake {
                      arguments "-DJUCE_BUILD_CONFIGURATION=DEBUG", "-DCMAKE_CXX_FLAGS_DEBUG=-O0", "-DCMAKE_C_FLAGS_DEBUG=-O0"
@@ -56,7 +61,6 @@ android {
             initWith release
             debuggable    false
             jniDebuggable false
-            signingConfig signingConfigs.juceSigning
             externalNativeBuild {
                 cmake {
                     arguments "-DJUCE_BUILD_CONFIGURATION=RELEASE", "-DCMAKE_CXX_FLAGS_RELEASE=-O3", "-DCMAKE_C_FLAGS_RELEASE=-O3"
@@ -70,14 +74,5 @@ android {
             ["../../external/JUCE/modules/juce_core/native/javacore/init",
              "../../external/JUCE/modules/juce_core/native/javacore/app",
              "../../external/JUCE/modules/juce_gui_basics/native/javaopt/app"]
-        main.res.srcDirs +=
-            []
     }
-
-    repositories {
-    }
-
-    dependencies {
-    }
-
 }
