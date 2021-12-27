@@ -7,11 +7,12 @@ on:
     branches: [ cmake ]
 
 env:
-  PROJECT_NAME: juicysfplugin
+  PROJECT_NAME: juicysf
   BUILD_TYPE: Release
   BUILD_DIR: ${{github.workspace}}/android/app/build/outputs/apk/release/
   PREBUILT_DIR: prebuilt
   FLUIDSYNTH_VERSION: 2.2.4
+  FLUIDSYNTH_POSTFIX: android24
   LINUX_DEPS: "libasound2-dev \
                libcurl4-openssl-dev \
                libfreetype6-dev \
@@ -28,30 +29,13 @@ env:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        runner: ['ubuntu']
-    runs-on: ${{ matrix.runner }}-latest
-    name: ${{ matrix.runner }}
+    runs-on: ubuntu-latest
+    name: gradle
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v2
         with:
           submodules: 'recursive'
-
-      - name: Download Prebuilt Fluidsynth Binaries
-        run: wget https://github.com/FluidSynth/fluidsynth/releases/download/v${{env.FLUIDSYNTH_VERSION}}/fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip
-
-      - name: Unpack Fluidsynth
-        run: |
-            unzip fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip -d ${{env.PREBUILT_DIR}} **/libfluidsynth.so
-            unzip fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip -d ${{env.PREBUILT_DIR}}  include/**
-
-      - name: Unpack Fluidsynth Dependencies
-        run: unzip fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip -d android/app/src/main/tmp *.so -x lib/**/libfluidsynth.so
-
-      - name: Move Fluidsynth Dependencies
-        run: mv android/app/src/main/tmp/lib android/app/src/main/jniLibs
 
       - name: Set up JDK 11
         uses: actions/setup-java@v2
@@ -62,11 +46,25 @@ jobs:
       - name: Linux - Install Deps
         run: sudo apt-get update && sudo apt install ${{env.LINUX_DEPS}}
 
-      - name: Grant Exec Permission
+      - name: Download Prebuilt Fluidsynth Binaries
+        run: wget https://github.com/FluidSynth/fluidsynth/releases/download/v${{env.FLUIDSYNTH_VERSION}}/fluidsynth-${{env.FLUIDSYNTH_VERSION}}-${{env.FLUIDSYNTH_POSTFIX}}.zip
+
+      - name: Unpack Fluidsynth
+        run: |
+            unzip fluidsynth-${{env.FLUIDSYNTH_VERSION}}-${{env.FLUIDSYNTH_POSTFIX}}.zip -d ${{env.PREBUILT_DIR}} **/libfluidsynth.so
+            unzip fluidsynth-${{env.FLUIDSYNTH_VERSION}}-${{env.FLUIDSYNTH_POSTFIX}}.zip -d ${{env.PREBUILT_DIR}}  include/**
+
+      - name: Unpack Fluidsynth Dependencies
+        run: unzip fluidsynth-${{env.FLUIDSYNTH_VERSION}}-${{env.FLUIDSYNTH_POSTFIX}}.zip -d android/app/src/main/tmp *.so -x lib/**/libfluidsynth.so
+
+      - name: Move Fluidsynth Dependencies
+        run: mv android/app/src/main/tmp/lib android/app/src/main/jniLibs
+
+      - name: Gradle - Grant Permission
         working-directory: ./android
         run: chmod +x gradlew
 
-      - name: Build
+      - name: Gradle - Build
         working-directory: ./android
         run: ./gradlew build
 
