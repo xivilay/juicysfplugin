@@ -45,7 +45,7 @@ jobs:
       - name: Unpack Fluidsynth
         run: |
             unzip fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip -d ${{env.PREBUILT_DIR}} **/libfluidsynth.so
-            unzip fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip -d ${{env.PREBUILT_DIR}}  include/**/*
+            unzip fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip -d ${{env.PREBUILT_DIR}}  include/**
 
       - name: Unpack Fluidsynth Dependencies
         run: unzip fluidsynth-${FLUIDSYNTH_VERSION}-android24.zip -d android/app/src/main/tmp *.so -x lib/**/libfluidsynth.so
